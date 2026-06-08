@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Python backend
 backend/venv/
 backend/__pycache__/
@@ -23,11 +22,3 @@ frontend/dist/
 # System files
 .DS_Store
 Thumbs.db
-=======
-venv/
-__pycache__/
-*.pyc
-.env
-credentials.json
-token.json
->>>>>>> 4d475ae8dd072c551f1adfcdbd360f3ce47ad962
