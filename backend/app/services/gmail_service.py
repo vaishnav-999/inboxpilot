@@ -93,6 +93,36 @@ def get_processed_emails(limit=10, category=None, min_score=None):
         email_category = classification["category"]
         category_summary[email_category] = category_summary.get(email_category, 0) + 1
 
+def extract_email_body(payload):
+    body = ""
+
+    if "body" in payload and payload["body"].get("data"):
+        body_data = payload["body"]["data"]
+        body = base64.urlsafe_b64decode(body_data).decode("utf-8", errors="ignore")
+        return body
+
+    if "parts" in payload:
+        for part in payload["parts"]:
+            mime_type = part.get("mimeType", "")
+
+            if mime_type == "text/plain":
+                body_data = part.get("body", {}).get("data")
+
+                if body_data:
+                    body = base64.urlsafe_b64decode(body_data).decode(
+                        "utf-8",
+                        errors="ignore"
+                    )
+                    return body
+
+            if "parts" in part:
+                nested_body = extract_email_body(part)
+
+                if nested_body:
+                    return nested_body
+
+    return body
+
 def get_processed_emails(limit=10, category=None, min_score=None):
     service = get_gmail_service()
 
@@ -173,4 +203,46 @@ def get_processed_emails(limit=10, category=None, min_score=None):
         "average_priority_score": round(average_score, 2),
         "category_summary": category_summary,
         "emails": emails
+    }
+def get_email_by_id(message_id):
+    service = get_gmail_service()
+
+    msg = service.users().messages().get(
+        userId="me",
+        id=message_id,
+        format="full"
+    ).execute()
+
+    headers = msg["payload"].get("headers", [])
+
+    subject = ""
+    sender = ""
+    recipient = ""
+    date = ""
+
+    for header in headers:
+        if header["name"] == "Subject":
+            subject = header["value"]
+        elif header["name"] == "From":
+            sender = header["value"]
+        elif header["name"] == "To":
+            recipient = header["value"]
+        elif header["name"] == "Date":
+            date = header["value"]
+
+    snippet = msg.get("snippet", "")
+    body = extract_email_body(msg["payload"])
+
+    classification = classify_email(sender, subject, snippet)
+
+    return {
+        "message_id": message_id,
+        "sender": sender,
+        "recipient": recipient,
+        "subject": subject,
+        "date": date,
+        "snippet": snippet,
+        "body": body,
+        "category": classification["category"],
+        "priority_score": classification["priority_score"],
     }

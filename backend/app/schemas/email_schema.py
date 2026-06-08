@@ -17,3 +17,15 @@ class EmailResponse(BaseModel):
     average_priority_score: float
     category_summary: Dict[str, int]
     emails: List[EmailItem]
+
+
+class EmailDetailResponse(BaseModel):
+    message_id: str
+    sender: str
+    recipient: str
+    subject: str
+    date: str
+    snippet: str
+    body: str
+    category: str
+    priority_score: int

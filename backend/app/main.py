@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from app.services.gmail_service import get_processed_emails
-from app.schemas.email_schema import EmailResponse
+from app.services.gmail_service import get_processed_emails, get_email_by_id
+from app.schemas.email_schema import EmailResponse, EmailDetailResponse
 
 app = FastAPI(
     title="InboxPilot API",
@@ -37,4 +37,8 @@ def get_emails(
         category=category,
         min_score=min_score
     )
+    return data
+@app.get("/emails/{message_id}", response_model=EmailDetailResponse)
+def get_email_detail(message_id: str):
+    data = get_email_by_id(message_id)
     return data
