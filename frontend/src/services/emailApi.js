@@ -20,3 +20,15 @@ export async function getEmails({ limit, category, minScore }) {
 
   return response.json();
 }
+
+export async function getEmailById(messageId) {
+  const response = await fetch(
+    `${EMAILS_URL}/${encodeURIComponent(messageId)}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch email details");
+  }
+
+  return response.json();
+}

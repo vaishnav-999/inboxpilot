@@ -11,8 +11,9 @@ function Filters({
   return (
     <div className="filters">
       <div className="filter-group">
-        <label>Limit</label>
+        <label htmlFor="limit">Show</label>
         <select
+          id="limit"
           value={limit}
           onChange={(event) => setLimit(Number(event.target.value))}
         >
@@ -24,8 +25,9 @@ function Filters({
       </div>
 
       <div className="filter-group">
-        <label>Category</label>
+        <label htmlFor="category">Category</label>
         <select
+          id="category"
           value={category}
           onChange={(event) => setCategory(event.target.value)}
         >
@@ -41,8 +43,9 @@ function Filters({
       </div>
 
       <div className="filter-group">
-        <label>Minimum Score</label>
+        <label htmlFor="min-score">Minimum priority score</label>
         <input
+          id="min-score"
           type="number"
           min="0"
           max="100"
@@ -52,11 +55,11 @@ function Filters({
         />
       </div>
 
-      <button className="apply-btn" onClick={onApply}>
+      <button type="button" className="apply-btn" onClick={onApply}>
         Apply Filters
       </button>
 
-      <button className="reset-btn" onClick={onReset}>
+      <button type="button" className="reset-btn" onClick={onReset}>
         Reset
       </button>
     </div>
