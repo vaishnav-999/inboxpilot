@@ -1,0 +1,24 @@
+# Python backend
+backend/venv/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/app/services/__pycache__/
+backend/app/schemas/__pycache__/
+*.pyc
+
+# Gmail OAuth secrets
+backend/credentials.json
+backend/token.json
+
+# Environment files
+.env
+backend/.env
+frontend/.env
+
+# React frontend
+frontend/node_modules/
+frontend/dist/
+
+# System files
+.DS_Store
+Thumbs.db
